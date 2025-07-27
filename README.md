@@ -3,6 +3,9 @@
 ## Introduction
 This guide provides step-by-step instructions for setting up a Windows environment to cross-compile C++ code for Raspberry Pi using Eclipse IDE. It covers installing the GCC cross-compiler, configuring Eclipse, setting up CMake, and debugging with GDB.
 
+![Overview of Cross-Compilation Setup](screenshots/overview.png)  
+*Screenshot: Example of the Eclipse IDE setup for Raspberry Pi cross-compilation.*
+
 ## Prerequisites
 - Windows PC (32-bit or 64-bit)  
 - Raspberry Pi with Raspbian OS (e.g., Bookworm, Bullseye, or Buster)  
@@ -39,7 +42,10 @@ Install the toolchain to `C:\SysGCC\raspberry` (32-bit) or `C:\SysGCC\raspberry6
    - **For 64-bit**:  
      ```bash
      "C:\Program Files (x86)\Sysprogs\SmarTTY\SmarTTY.exe" /UpdateSysroot:C:\SysGCC\raspberry64\aarch64-linux-gnu\sysroot
-     ```
+     ```  
+
+![SmarTTY Sysroot Sync](screenshots/smartty-sync.png)  
+*Screenshot: SmarTTY interface during sysroot synchronization.*
 
 ## 3. Clone the Project Repository
 Clone your project repository to your local machine:  
@@ -52,6 +58,8 @@ git clone <your-repository-url>
 2. **Import the project**:  
    - Go to `File > Import... > C/C++ > Existing Code as Makefile Project`.  
    - Select the cloned project directory and name the project.  
+   ![Eclipse Project Import](screenshots/eclipse-import.png)  
+   *Screenshot: Importing a project in Eclipse IDE.*  
 3. **Configure the toolchain**:  
    - Go to `Project > Properties > C/C++ Build > Builder Settings`.  
    - Check `Generate Makefiles automatically` but do not apply yet.  
@@ -59,13 +67,17 @@ git clone <your-repository-url>
    - Set the cross-toolchain prefix to `arm-linux-gnueabihf-` (32-bit) or `aarch64-linux-gnu-` (64-bit).  
    - Set the toolchain binaries path, e.g., `C:\SysGCC\raspberry\bin` (32-bit) or `C:\SysGCC\raspberry64\bin` (64-bit).  
    - Return to `Builder Settings` and uncheck `Generate Makefiles automatically`.  
+   ![Eclipse Toolchain Settings](screenshots/eclipse-toolchain.png)  
+   *Screenshot: Configuring the toolchain in Eclipse.*  
 4. **Configure the Build Output Parser**:  
    - Go to `Window > Preferences > C/C++ > Build > Settings > Discovery Tab > CDT GCC Build Output Parser`.  
    - Alternatively, for project-specific settings: `Project > Properties > C/C++ General > Preprocessor Include... > Providers > CDT GCC Build Output Parser`.  
    - Set the compiler pattern to `(.*gcc)|(.*g\+\+)|(clang)` to handle cross-compiler output (e.g., `arm-linux-gnueabihf-gcc`).  
 5. **Configure SSH connection**:  
    - Go to `Debug > Debug Configurations > Connection > New Connection > SSH`.  
-   - Set up the connection and browse the remote file path on the Raspberry Pi.
+   - Set up the connection and browse the remote file path on the Raspberry Pi.  
+   ![Eclipse SSH Setup](screenshots/eclipse-ssh.png)  
+   *Screenshot: Setting up SSH connection in Eclipse.*
 
 ## 5. Build and Test
 1. Build the project: `Project > Build Project`.  
@@ -73,17 +85,23 @@ git clone <your-repository-url>
    ```bash
    chmod +x your_executable
    ./your_executable
-   ```
+   ```  
+   ![Raspberry Pi Execution](screenshots/raspberry-execution.png)  
+   *Screenshot: Running the executable on Raspberry Pi via SSH.*
 
 ## 6. Debug with GDB
 1. Go to `Run > Debug Configurations > C_-Hello-World Debug > Debugger tab`.  
 2. Set the GDB debugger to `C:\SysGCC\raspberry\bin\arm-linux-gnueabihf-gdb.exe` (32-bit) or `C:\SysGCC\raspberry64\bin\aarch64-linux-gnu-gdb.exe` (64-bit).  
-3. Apply and test the connection.
+3. Apply and test the connection.  
+   ![GDB Debugging](screenshots/gdb-debug.png)  
+   *Screenshot: Configuring GDB debugger in Eclipse.*
 
 ## 7. Set Up CMake
 1. **Install the cmake4eclipse plugin**:  
    - Go to `Help > Eclipse Marketplace`.  
    - Search for `cmake4eclipse`, select the plugin, and install. Restart Eclipse.  
+   ![CMake Plugin Installation](screenshots/cmake-plugin.png)  
+   *Screenshot: Installing cmake4eclipse plugin in Eclipse Marketplace.*  
 2. **Add toolchain to PATH**:  
    - Right-click `This PC > Properties > Advanced system settings > Environment Variables`.  
    - Under `System Variables`, find `Path`, click `Edit`, and add `C:\SysGCC\raspberry\bin` (32-bit) or `C:\SysGCC\raspberry64\bin` (64-bit).  
@@ -103,6 +121,8 @@ git clone <your-repository-url>
    set(CMAKE_CXX_STANDARD 11)
    add_executable(your_executable main.cpp)
    ```  
+   ![CMakeLists Example](screenshots/cmakelists.png)  
+   *Screenshot: Example CMakeLists.txt file in Eclipse.*  
 7. **Configure the core build toolchain**:  
    - Go to `Window > Preferences > cmake4eclipse > Build Tool Kits`.  
    - Add the path to the build tools and CMake executable.  
